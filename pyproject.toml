@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "bs4>=0.0.2",
+    "fastparquet>=2025.12.0",
     "geopandas>=1.1.1",
     "jupyter>=1.1.1",
     "lonboard>=0.13.0",
@@ -13,5 +14,6 @@ dependencies = [
     "pandas>=2.3.3",
     "playwright>=1.56.0",
     "plotly>=6.5.0",
+    "pyarrow>=22.0.0",
     "requests>=2.32.5",
 ]
