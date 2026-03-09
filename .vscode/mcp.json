@@ -1,0 +1,20 @@
+{
+    "inputs": [
+        {
+            "id": "datawrapper-api-key",
+            "type": "promptString",
+            "description": "Datawrapper API Token (from https://app.datawrapper.de/account/api-tokens)",
+            "password": true
+        }
+    ],
+    "servers": {
+        "datawrapper": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": ["datawrapper-mcp"],
+            "env": {
+                "DATAWRAPPER_ACCESS_TOKEN": "${input:datawrapper-api-key}"
+            }
+        }
+    }
+}
