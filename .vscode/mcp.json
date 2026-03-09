@@ -15,6 +15,11 @@
             "env": {
                 "DATAWRAPPER_ACCESS_TOKEN": "${input:datawrapper-api-key}"
             }
+        },
+        "playwright": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
         }
     }
 }
