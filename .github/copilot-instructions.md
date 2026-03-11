@@ -58,3 +58,12 @@ df = (pd
 - Data in `data/` (gitignored)
 - Progress files: `data/*_progress.json`
 - No scripts/ directory — everything in notebooks
+
+## Skill Disambiguation
+
+When multiple skills could apply, these rules decide which one wins. My instructions always override skill defaults.
+
+- **CSV/TSV/data cleaning → data-journalism, not xlsx.** The xlsx skill only applies when the *deliverable* is a formatted .xlsx file. If I'm analyzing, cleaning or exploring tabular data and the output is a notebook, chart or story, use data-journalism. The xlsx skill triggers only when I explicitly ask for a spreadsheet file as output.
+- **Python over JavaScript.** The pptx and docx skills default to JS libraries (pptxgenjs, docx-js) for creating files from scratch. Prefer Python equivalents (python-pptx, python-docx) unless I specifically ask for JS or the Python library can't do what's needed. The pptx skill's Python-based XML editing workflow (unpack → edit → repack) is fine as-is.
+- **Pandas over Excel formulas for analysis.** The xlsx skill says "always use Excel formulas instead of Python." Ignore that when I'm doing data analysis — use pandas and openpyxl together. Only use pure Excel formulas when I ask for a self-updating spreadsheet model that someone else will maintain without Python.
+- **Font rules are domain-scoped.** The xlsx skill's "use Arial/Times New Roman" applies only to spreadsheet deliverables. The frontend-design skill's "never use Arial" applies only to web UI. Neither overrides the other.
