@@ -24,9 +24,12 @@ For more understanding about data journalism and the way Ari likes his code, use
 - Prefer readable method chains using lambdas, `.pipe(...)` and `.assign(...)`.
 - Do not overwrite a dataframe with a transformed version of itself. For example, do not write `companies = companies.loc[...]`; give the result a new short, descriptive name.
 - Do not create unnecessary helper functions. Keep simple transformations directly in the method chain.
+- Do not create a function for one-off column cleanup or normalization; write it visibly with pandas string methods inside `.assign(...)`. Keep functions only for genuinely reused or complex operations such as API retries, parsing or checkpoint writes.
 - Use `snake_case` for every variable and column name.
 - Use short, descriptive dataframe names tied to their contents, such as `acs` for American Community Survey data. Never use generic names such as `df`.
 - Do not define path variables or path constants. Inline paths in the read or write operation that uses them.
+- In notebooks, use direct relative paths such as `../data/created/companies.parquet`; never calculate a project root with `Path.cwd()`.
+- Use `Path` only where a path method is required, for example `Path("../data/created/output").mkdir(parents=True, exist_ok=True)`.
 - Read data directly from its source URL whenever pandas or the relevant library supports it. Download a local copy only when the source or workflow requires one.
 - Store source-faithful raw inputs in `data/raw/`.
 - Store cleaned single-source data in `data/cleaned/`.
