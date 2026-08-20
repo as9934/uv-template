@@ -18,6 +18,7 @@ For more understanding about data journalism and the way Ari likes his code, use
 - Put all analysis code in numbered Jupyter notebooks such as `0_collect.ipynb` and `1_clean.ipynb`.
 - Use one notebook per discrete task.
 - Keep each cell focused on one thing and use very little code per cell.
+- Immediately after creating or transforming a top-level pandas DataFrame, add a separate `dataframe_name.head()` cell so the result is visible. Guard the preview with the same condition when the DataFrame is created conditionally.
 - Put all imports in the first code cell.
 - Do not write notes to yourself, scratch commentary or implementation reminders in notebooks.
 - Use pandas for tabular analysis.
@@ -31,6 +32,7 @@ For more understanding about data journalism and the way Ari likes his code, use
 - In notebooks, use direct relative paths such as `../data/created/companies.parquet`; never calculate a project root with `Path.cwd()`.
 - Use `Path` only where a path method is required, for example `Path("../data/created/output").mkdir(parents=True, exist_ok=True)`.
 - Read data directly from its source URL whenever pandas or the relevant library supports it. Download a local copy only when the source or workflow requires one.
+- Never drop columns when reading in raw data. Don't restrict fields at ingestion with `usecols=`, `columns=`, a `fields`/`f` API parameter, or by hand-picking keys out of a JSON/API response. Read and keep every column or field the raw source provides; only narrow it down later, deliberately, downstream of the raw read.
 - Store source-faithful raw inputs in `data/raw/`.
 - Store cleaned single-source data in `data/cleaned/`.
 - Store newly created, joined or derived datasets in `data/created/`.
