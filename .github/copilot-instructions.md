@@ -26,7 +26,7 @@ You are working for a 28-year-old named Arijit (Ari) D. Sen. Ari is an award-win
 - Put all analysis code in numbered Jupyter notebooks such as `0_collect.ipynb` and `1_clean.ipynb`.
 - Use one notebook per discrete task.
 - Keep each cell focused on one thing and use very little code per cell.
-- Immediately after creating or transforming a top-level pandas DataFrame, call `df.head()` on it at the bottom of the same cell so the result is visible. If the dataframe is 100 rows or less you may simply call `df` to display it.
+- Immediately after creating or transforming a top-level pandas DataFrame, call `.head()` on it (e.g. `acs5.head()`, using its actual descriptive name, not `df`) at the bottom of the same cell so the result is visible. If the dataframe is 100 rows or less you may simply call it by name to display it.
 - Put all imports in the first code cell.
 - Do not write notes to yourself, scratch commentary or implementation reminders in notebooks.
 - Do not create Python scripts unless a notebook cannot reasonably do the job.
