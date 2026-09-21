@@ -1,6 +1,6 @@
 ---
 name: foia-requests
-description: Freedom of Information Act (FOIA) and public records request workflows. Use when drafting records requests, tracking submissions, understanding exemptions, appealing denials, or managing large document productions. Essential for investigative journalists, researchers, and transparency advocates.
+description: FOIA and public records workflows. Use when drafting requests, tracking submissions, checking exemptions, or appealing denials.
 ---
 
 # FOIA and public records requests
@@ -128,7 +128,7 @@ Court decisions and attorneys general opinions in some states have held that the
 
 *Source: [National Conference of State Legislatures](https://www.ncsl.org/center-for-legislative-strengthening/public-records-law-and-state-legislatures), Updated April 2025*
 
-### NJ OPRA reforms (P.L. 2024, c. 16) — effective Sept. 3, 2024
+### NJ OPRA reforms (P.L. 2024, c. 16), effective Sept. 3, 2024
 
 Senate bill S2930 (signed June 5, 2024; effective Sept. 3, 2024) changed New Jersey's Open Public Records Act in five ways that make requesting harder:
 
@@ -230,7 +230,7 @@ I request a waiver of all fees pursuant to 5 U.S.C. § 552(a)(4)(A)(iii), which 
 
 The records I have requested meet that standard. They bear directly on [SPECIFIC_GOVERNMENT_OPERATION], a matter of public concern. I have the intent and ability to disseminate this information to a meaningful audience through [PUBLICATION_CHANNEL]. My request is non-commercial; I will not resell the records or use them primarily for private gain. *See Judicial Watch, Inc. v. Rossotti*, 326 F.3d 1309, 1312 (D.C. Cir. 2003) (Congress amended FOIA to ensure that fee-waiver provisions are "liberally construed in favor of waivers for noncommercial requesters"). I incorporate by reference the explanation in the sections above.
 
-Should the fee waiver be denied, I request to be categorized as a representative of the news media for fee purposes pursuant to 5 U.S.C. § 552(a)(4)(A)(ii)(II). The statute defines a representative of the news media as "any person or entity that gathers information of potential interest to a segment of the public, uses its editorial skills to turn the raw materials into a distinct work, and distributes that work to an audience" — a definition derived from the holding in *Nat'l Sec. Archive v. Dep't of Def.*, 880 F.2d 1387 (D.C. Cir. 1989). I qualify under this definition because I [DESCRIBE_REPORTING_PROCESS_AND_AUDIENCE].
+Should the fee waiver be denied, I request to be categorized as a representative of the news media for fee purposes pursuant to 5 U.S.C. § 552(a)(4)(A)(ii)(II). The statute defines a representative of the news media as "any person or entity that gathers information of potential interest to a segment of the public, uses its editorial skills to turn the raw materials into a distinct work, and distributes that work to an audience", a definition derived from the holding in *Nat'l Sec. Archive v. Dep't of Def.*, 880 F.2d 1387 (D.C. Cir. 1989). I qualify under this definition because I [DESCRIBE_REPORTING_PROCESS_AND_AUDIENCE].
 
 If both the fee waiver and the news-media classification are denied, please provide an itemized estimate of charges in writing before processing further. I am willing to pay reasonable charges up to $[AMOUNT] only if such a denial is final.
 
@@ -298,6 +298,8 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Optional
 
+import holidays  # pip install holidays
+
 class RequestStatus(Enum):
     DRAFTED = "drafted"
     SUBMITTED = "submitted"
@@ -342,9 +344,21 @@ class FOIARequest:
 
     @property
     def statutory_deadline(self) -> date:
-        """Federal FOIA: 20 business days from submission."""
-        # Simplified - should account for business days
-        return self.date_submitted + timedelta(days=28)
+        """Federal FOIA: 20 business days from submission.
+
+        Business days exclude weekends and legal federal holidays, per
+        5 U.S.C. 552(a)(6)(A)(i). The count starts the day after submission.
+        holidays.US() covers only nationwide federal holidays and expands to
+        the queried year on lookup, so windows crossing into a new year (e.g.
+        late December) still exclude the right days.
+        """
+        us_holidays = holidays.US()
+        remaining, deadline = 20, self.date_submitted
+        while remaining:
+            deadline += timedelta(days=1)
+            if deadline.weekday() < 5 and deadline not in us_holidays:  # Mon-Fri, non-holiday
+                remaining -= 1
+        return deadline
 
     @property
     def is_overdue(self) -> bool:
@@ -377,7 +391,7 @@ TRACKING_COLUMNS = [
 ```markdown
 ## Status inquiry (after 20+ business days)
 
-Subject: Status inquiry — FOIA request [tracking number]
+Subject: Status inquiry, FOIA request [tracking number]
 
 Dear FOIA Officer:
 
@@ -400,7 +414,7 @@ Sincerely,
 ```markdown
 ## Fee waiver appeal
 
-Subject: Appeal of fee waiver denial — request [number]
+Subject: Appeal of fee waiver denial, request [number]
 
 Dear FOIA Appeals Officer:
 
