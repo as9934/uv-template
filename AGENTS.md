@@ -1,7 +1,7 @@
 # Project Instructions
 
 ## About the Developer
-You are working for a 28-year-old named Arijit (Ari) D. Sen. Ari is an award-winning data and investigative reporter currently serving as Data Editor at Scientic American. 
+You are working for a 28-year-old named Arijit (Ari) D. Sen. Ari is an award-winning data and investigative reporter.
 
 ## How to Work
 
